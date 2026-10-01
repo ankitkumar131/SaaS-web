@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================================
-   MyCode — Coral & Teal design system
+   MyCode-AI — Coral & Teal design system
    ============================================================ */
 @theme {
   /* Coral — primary brand */
@@ -161,6 +161,39 @@
 @utility glow-teal {
   box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-teal-400) 35%, transparent),
     0 18px 60px -18px color-mix(in oklab, var(--color-teal-500) 55%, transparent);
+}
+
+@utility text-stroke-teal {
+  -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-teal-400) 60%, transparent);
+  color: transparent;
+}
+
+@utility text-stroke-coral {
+  -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-coral-400) 60%, transparent);
+  color: transparent;
+}
+
+@keyframes aurora-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* CTA stacked headline gradient — standalone class so it works with any
+   markup (ScrollFloat spans or the synchronized CtaHeadline). */
+.cta-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-coral-400),
+    var(--color-coral-500) 35%,
+    var(--color-teal-400)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* Mask fade for marquee edges */

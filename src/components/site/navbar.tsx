@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { Menu, X, Sparkles, ArrowRight } from "lucide-react";
 import { GithubIcon } from "@/components/ui/github-icon";
+import Logo from "@/components/ui/logo";
 import StarBorder from "@/components/react-bits/StarBorder/StarBorder";
 
 const NAV_LINKS = [
@@ -16,17 +17,6 @@ const NAV_LINKS = [
 ];
 
 const REPO = "https://github.com/ankitkumar131/mycode-ai";
-
-function BrandMark() {
-  return (
-    <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-teal-500 shadow-lg shadow-coral-500/25">
-      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M8 7 4 12l4 5" />
-        <path d="M16 7l4 5-4 5" />
-      </svg>
-    </span>
-  );
-}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -67,12 +57,7 @@ export default function Navbar() {
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-2.5">
-          <BrandMark />
-          <span className="text-lg font-bold tracking-tight text-white">
-            My<span className="text-gradient">Code</span>
-          </span>
-        </Link>
+        <Logo />
 
         {/* Desktop links */}
         <div className="hidden items-center gap-1 md:flex">
@@ -89,11 +74,11 @@ export default function Navbar() {
                 {isActive && (
                   <motion.span
                     layoutId="nav-active"
-                    className="absolute inset-0 -z-10 rounded-full border border-white/10 bg-white/5"
+                    className="absolute inset-0 rounded-full border border-white/10 bg-white/5"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
-                {link.label}
+                <span className="relative">{link.label}</span>
               </a>
             );
           })}

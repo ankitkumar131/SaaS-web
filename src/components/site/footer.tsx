@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import { GithubIcon } from "@/components/ui/github-icon";
+import Logo from "@/components/ui/logo";
 
 const REPO = "https://github.com/ankitkumar131/mycode-ai";
 
@@ -44,17 +45,7 @@ export default function Footer() {
         <div className="grid gap-10 lg:grid-cols-[1.4fr_2fr]">
           {/* Brand */}
           <div>
-            <Link href="/" className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-teal-500">
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M8 7 4 12l4 5" />
-                  <path d="M16 7l4 5-4 5" />
-                </svg>
-              </span>
-              <span className="text-lg font-bold text-white">
-                My<span className="text-gradient">Code</span>
-              </span>
-            </Link>
+            <Logo />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-400">
               Your universal AI coding agent in the terminal. One agent, any AI provider, no lock-in — just code.
             </p>
@@ -95,7 +86,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 sm:flex-row">
           <p className="text-xs text-slate-500">
-            © {new Date().getFullYear()} MyCode. Open source under the MIT License.
+            © {new Date().getFullYear()} MyCode-AI. Open source under the MIT License.
           </p>
           <p className="flex items-center gap-1.5 text-xs text-slate-500">
             Built with <Heart className="h-3.5 w-3.5 fill-coral-500 text-coral-500" /> using

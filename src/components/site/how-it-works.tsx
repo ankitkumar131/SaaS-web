@@ -58,11 +58,11 @@ export default function HowItWorks() {
           {/* connector */}
           <div className="pointer-events-none absolute left-0 right-0 top-12 hidden h-px bg-gradient-to-r from-transparent via-coral-500/40 to-transparent lg:block" />
 
-          <div className="grid gap-8 lg:grid-cols-3">
+          <div className="grid items-stretch gap-8 lg:grid-cols-3">
             {STEPS.map((s, i) => {
               const Icon = s.icon;
               return (
-                <Reveal key={s.step} delay={i * 140} distance={50}>
+                <Reveal key={s.step} delay={i * 140} distance={50} className="h-full">
                   <div className="relative flex h-full flex-col">
                     <div className="mb-6 flex items-center gap-4">
                       <span className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-ink-850 shadow-lg shadow-black/40">

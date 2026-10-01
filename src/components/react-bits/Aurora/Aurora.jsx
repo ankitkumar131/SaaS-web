@@ -121,10 +121,17 @@ void main() {
 }
 `;
 
+// Cap DPR — the simplex shader is fill-rate bound; above 1.5x the visual
+// difference is negligible but the GPU cost roughly quadruples at 2x.
+const MAX_DPR = 1.5;
+const cappedDpr = () => Math.min(window.devicePixelRatio || 1, MAX_DPR);
+
 export default function Aurora(props) {
   const { colorStops = ['#5227FF', '#7cff67', '#5227FF'], amplitude = 1.0, blend = 0.5, lightMode = false } = props;
   const propsRef = useRef(props);
-  propsRef.current = props;
+  useEffect(() => {
+    propsRef.current = props;
+  });
 
   const ctnDom = useRef(null);
 
@@ -132,10 +139,13 @@ export default function Aurora(props) {
     const ctn = ctnDom.current;
     if (!ctn) return;
 
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const renderer = new Renderer({
       alpha: true,
       premultipliedAlpha: true,
-      antialias: true
+      antialias: false,
+      dpr: cappedDpr()
     });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
@@ -149,6 +159,7 @@ export default function Aurora(props) {
       if (!ctn) return;
       const width = ctn.offsetWidth;
       const height = ctn.offsetHeight;
+      if (!width || !height) return;
       renderer.setSize(width, height);
       if (program) {
         program.uniforms.uResolution.value = [width, height];
@@ -182,11 +193,9 @@ export default function Aurora(props) {
     const mesh = new Mesh(gl, { geometry, program });
     ctn.appendChild(gl.canvas);
 
-    let animateId = 0;
-    const update = t => {
-      animateId = requestAnimationFrame(update);
-      const { time = t * 0.01, speed = 1.0 } = propsRef.current;
-      program.uniforms.uTime.value = time * speed * 0.1;
+    const syncUniforms = time => {
+      const { time: timeOffset = time * 0.01, speed = 1.0 } = propsRef.current;
+      program.uniforms.uTime.value = timeOffset * speed * 0.1;
       program.uniforms.uAmplitude.value = propsRef.current.amplitude ?? 1.0;
       program.uniforms.uBlend.value = propsRef.current.blend ?? blend;
       program.uniforms.uLightMode.value = (propsRef.current.lightMode ?? lightMode) ? 1 : 0;
@@ -195,14 +204,55 @@ export default function Aurora(props) {
         const c = new Color(hex);
         return [c.r, c.g, c.b];
       });
-      renderer.render({ scene: mesh });
     };
-    animateId = requestAnimationFrame(update);
+
+    // Pause rendering while offscreen or tab-hidden: the rAF loop stays
+    // alive but skips GPU work, so scrolling past the hero/CTA is free.
+    let inView = true;
+    const io = new IntersectionObserver(
+      entries => {
+        inView = entries[0]?.isIntersecting ?? true;
+      },
+      { rootMargin: '120px' }
+    );
+    io.observe(ctn);
+
+    const onVisibility = () => {
+      if (!document.hidden && inView) {
+        lastTime = performance.now();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    let animateId = 0;
+    let lastTime = performance.now();
+
+    if (reducedMotion) {
+      // Single static frame — no perpetual GPU loop.
+      syncUniforms(0);
+      renderer.render({ scene: mesh });
+    } else {
+      const update = t => {
+        animateId = requestAnimationFrame(update);
+        if (!inView || document.hidden) {
+          lastTime = t;
+          return;
+        }
+        // Clamp huge frame gaps (tab switch) so the shader doesn't jump.
+        if (t - lastTime > 250) lastTime = t;
+        lastTime = t;
+        syncUniforms(t);
+        renderer.render({ scene: mesh });
+      };
+      animateId = requestAnimationFrame(update);
+    }
 
     resize();
 
     return () => {
       cancelAnimationFrame(animateId);
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('resize', resize);
       if (ctn && gl.canvas.parentNode === ctn) {
         ctn.removeChild(gl.canvas);

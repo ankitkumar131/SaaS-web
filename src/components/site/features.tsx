@@ -109,11 +109,11 @@ export default function Features() {
           subtitle="A complete coding agent that respects your stack, your keys, and your budget — with no vendor lock-in."
         />
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((feature, i) => {
             const Icon = feature.icon;
             return (
-              <Reveal key={feature.title} delay={(i % 3) * 90} distance={50}>
+              <Reveal key={feature.title} delay={(i % 3) * 90} distance={50} className="h-full">
                 <SpotlightCard
                   spotlightColor={spotColor[feature.accent]}
                   className="group h-full border border-white/10 bg-ink-850/50 transition-all duration-300 hover:-translate-y-1 hover:border-white/20"

@@ -11,8 +11,8 @@ const geistMono = GeistMono;
 export const metadata: Metadata = {
   metadataBase: new URL("https://mycode-ai.dev"),
   title: {
-    default: "MyCode — Your Universal AI Coding Agent",
-    template: "%s · MyCode",
+    default: "MyCode-AI — Your Universal AI Coding Agent",
+    template: "%s · MyCode-AI",
   },
   description:
     "Like Claude Code, but works with any AI provider. One agent, any OpenAI-compatible API, automatic failover, and autonomous tool use — straight from your terminal.",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "ankitkumar131" }],
   openGraph: {
-    title: "MyCode — Your Universal AI Coding Agent",
+    title: "MyCode-AI — Your Universal AI Coding Agent",
     description:
       "One agent. Any AI provider. No lock-in. Just code. Bring your own API key and start coding in seconds.",
     type: "website",

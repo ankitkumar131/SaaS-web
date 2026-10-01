@@ -1,6 +1,7 @@
 import Navbar from "@/components/site/navbar";
 import Hero from "@/components/site/hero";
 import SocialProof from "@/components/site/social-proof";
+import VelocityDivider from "@/components/site/velocity-divider";
 import Features from "@/components/site/features";
 import HowItWorks from "@/components/site/how-it-works";
 import Providers from "@/components/site/providers";
@@ -17,11 +18,13 @@ export default function Home() {
       <main className="overflow-x-hidden">
         <Hero />
         <SocialProof />
+        <VelocityDivider texts={["ANY PROVIDER", "NO LOCK-IN", "YOUR KEYS"]} />
         <Features />
         <HowItWorks />
         <Providers />
         <AgentMode />
         <Failover />
+        <VelocityDivider texts={["AUTO FAILOVER", "AGENT MODE", "OPEN SOURCE"]} />
         <Pricing />
         <CtaSection />
       </main>

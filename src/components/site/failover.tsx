@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ChevronRight, AlertTriangle } from "lucide-react";
+import { ChevronDown, ChevronRight, AlertTriangle } from "lucide-react";
+import ScrollReveal from "@/components/react-bits/ScrollReveal/ScrollReveal";
 import { SectionHeading, Reveal } from "./primitives";
 
 const CHAIN = [
@@ -36,19 +37,30 @@ export default function Failover() {
           subtitle="Chain multiple providers by priority. When one fails, MyCode fails over automatically — you just keep coding."
         />
 
+        {/* Manifesto — scrub-revealed on scroll */}
+        <ScrollReveal
+          containerClassName="mx-auto mt-10 max-w-3xl text-center"
+          textClassName="text-xl font-semibold leading-relaxed text-slate-200 sm:text-2xl"
+          baseOpacity={0.14}
+          baseRotation={2}
+          blurStrength={6}
+        >
+          Rate limits. Outages. Context overflow. Your flow never breaks — MyCode just switches providers and keeps shipping.
+        </ScrollReveal>
+
         {/* Chain */}
         <Reveal delay={80} distance={30}>
-          <div className="mt-14 flex flex-col items-stretch gap-3 lg:flex-row lg:items-center lg:justify-center">
+          <div className="mt-12 flex flex-col items-stretch gap-2 lg:flex-row lg:items-center lg:justify-center lg:gap-3">
             {CHAIN.map((node, i) => (
-              <div key={node.label} className="flex flex-col items-center gap-3 lg:flex-row">
+              <div key={node.label} className="flex flex-col items-stretch gap-2 lg:flex-row lg:items-center lg:gap-3">
                 <div
-                  className={`flex w-full min-w-[180px] flex-col items-center rounded-2xl border px-6 py-4 text-center lg:w-auto ${toneStyles[node.tone]}`}
+                  className={`flex w-full flex-col items-center rounded-2xl border px-6 py-4 text-center lg:w-auto lg:min-w-[180px] ${toneStyles[node.tone]}`}
                 >
                   <span className="text-sm font-semibold">{node.label}</span>
                   <span className="mt-0.5 text-xs opacity-70">{node.sub}</span>
                 </div>
                 {i < CHAIN.length - 1 && (
-                  <div className="flex items-center gap-1.5 text-slate-500 lg:flex-col">
+                  <div className="flex items-center justify-center gap-1.5 py-1 text-slate-500 lg:py-0">
                     <motion.span
                       animate={{ x: [0, 6, 0] }}
                       transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
@@ -56,9 +68,13 @@ export default function Failover() {
                     >
                       <ChevronRight className="h-6 w-6 text-coral-400" />
                     </motion.span>
-                    <span className="rotate-90 lg:rotate-0">
-                      <ChevronRight className="h-6 w-6 text-coral-400 lg:hidden" />
-                    </span>
+                    <motion.span
+                      animate={{ y: [0, 6, 0] }}
+                      transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+                      className="lg:hidden"
+                    >
+                      <ChevronDown className="h-6 w-6 text-coral-400" />
+                    </motion.span>
                     <span className="rounded-full bg-white/5 px-2 py-0.5 font-mono text-[10px] text-slate-400">
                       fails?
                     </span>
@@ -80,15 +96,15 @@ export default function Failover() {
               {ERRORS.map((e) => (
                 <div
                   key={e.code}
-                  className="grid grid-cols-1 items-center gap-1 px-5 py-3.5 sm:grid-cols-[140px_1fr] sm:gap-4"
+                  className="grid grid-cols-1 items-start gap-2 px-5 py-3.5 sm:grid-cols-[220px_minmax(0,1fr)] sm:items-center sm:gap-4"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="rounded-md bg-coral-500/15 px-2 py-1 font-mono text-xs font-bold text-coral-300 ring-1 ring-coral-400/20">
+                  <div className="flex min-w-0 flex-wrap items-center gap-2">
+                    <span className="shrink-0 rounded-md bg-coral-500/15 px-2 py-1 font-mono text-xs font-bold text-coral-300 ring-1 ring-coral-400/20">
                       {e.code}
                     </span>
-                    <span className="text-sm font-medium text-white">{e.name}</span>
+                    <span className="min-w-0 break-words text-sm font-medium text-white">{e.name}</span>
                   </div>
-                  <div className="text-sm text-slate-400">{e.behavior}</div>
+                  <div className="min-w-0 text-sm leading-relaxed text-slate-400">{e.behavior}</div>
                 </div>
               ))}
             </div>

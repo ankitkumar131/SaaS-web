@@ -80,11 +80,11 @@ export default function Pricing() {
           subtitle="The entire agent is MIT-licensed and runs on your machine. Paid layers are optional and on the roadmap."
         />
 
-        <div className="mt-14 grid items-start gap-6 lg:grid-cols-3">
+        <div className="mt-14 grid items-stretch gap-6 lg:grid-cols-3">
           {TIERS.map((tier, i) => (
-            <Reveal key={tier.name} delay={i * 110} distance={50}>
+            <Reveal key={tier.name} delay={i * 110} distance={50} className="h-full">
               {tier.featured ? (
-                <div className="relative rounded-3xl bg-gradient-to-br from-coral-500 via-coral-400 to-teal-500 p-px shadow-2xl shadow-coral-500/10">
+                <div className="relative h-full rounded-3xl bg-gradient-to-br from-coral-500 via-coral-400 to-teal-500 p-px shadow-2xl shadow-coral-500/10">
                   <div className="relative h-full rounded-[calc(1.5rem-1px)] bg-ink-900 p-7">
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                       <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-coral-500 to-teal-500 px-3.5 py-1 text-xs font-bold text-white shadow-lg">

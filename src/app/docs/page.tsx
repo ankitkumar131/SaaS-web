@@ -98,7 +98,7 @@ sdk.registerProvider({
 
 export const metadata = {
   title: "Documentation",
-  description: "Install, configure, and use MyCode — the universal AI coding agent.",
+  description: "Install, configure, and use MyCode-AI — the universal AI coding agent.",
 };
 
 export default function DocsPage() {
@@ -108,7 +108,7 @@ export default function DocsPage() {
       <Reveal distance={16}>
         <Eyebrow>Documentation</Eyebrow>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
-          Install &amp; use <span className="text-gradient">MyCode</span>
+          Install &amp; use <span className="text-gradient">MyCode-AI</span>
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-slate-400">
           Everything you need to get the universal AI coding agent running in your terminal — from
@@ -287,7 +287,7 @@ export default function DocsPage() {
         <DocSection id="project-context" title="Project context (MYCODE.md)">
           <P>
             Create a <InlineCode>.mycode/MYCODE.md</InlineCode> file to give MyCode deep knowledge of your
-            project. It's loaded into every interaction for consistent, project-aware responses.
+            project. It&apos;s loaded into every interaction for consistent, project-aware responses.
           </P>
           <CodeBlock code={MYCODE_MD} filename=".mycode/MYCODE.md" lang="markdown" />
         </DocSection>
@@ -306,7 +306,7 @@ export default function DocsPage() {
         </DocSection>
 
         <DocSection id="contributing" title="Contributing">
-          <P>Contributions are welcome! Here's how to get started:</P>
+          <P>Contributions are welcome! Here&apos;s how to get started:</P>
           <List
             items={[
               "Fork the repository",

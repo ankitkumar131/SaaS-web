@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { ArrowRight, BookOpen, Star, Zap } from "lucide-react";
-import Aurora from "@/components/react-bits/Aurora/Aurora";
+import AuroraBackdrop from "@/components/react-bits/Aurora/AuroraBackdrop";
 import SplitText from "@/components/react-bits/SplitText/SplitText";
 import GradientText from "@/components/react-bits/GradientText/GradientText";
 import TextType from "@/components/react-bits/TextType/TextType";
@@ -29,11 +29,15 @@ const TERMINAL_LINES = [
 export default function Hero() {
   return (
     <section id="hero" className="relative isolate overflow-hidden pt-28 pb-16 sm:pt-32">
-      {/* Aurora background */}
+      {/* Aurora background — lazy WebGL over an instant CSS fallback */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 opacity-70">
-          <Aurora colorStops={["#ff6f5e", "#2dd4bf", "#ff8b76"]} amplitude={1.15} blend={0.6} speed={0.6} />
-        </div>
+        <AuroraBackdrop
+          colorStops={["#ff6f5e", "#2dd4bf", "#ff8b76"]}
+          amplitude={1.15}
+          blend={0.6}
+          speed={0.6}
+          className="opacity-70"
+        />
         <div className="absolute inset-0 grid-bg opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink-950/40 via-ink-950/70 to-ink-950" />
       </div>

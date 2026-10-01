@@ -17,6 +17,7 @@ const ElectricBorder = ({
   const animationRef = useRef(null);
   const timeRef = useRef(0);
   const lastFrameTimeRef = useRef(0);
+  const visibleRef = useRef(true);
 
   // Noise functions
   const random = useCallback(x => {
@@ -162,7 +163,7 @@ const ElectricBorder = ({
       const height = rect.height + borderOffset * 2;
 
       // Use device pixel ratio for sharp rendering
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
@@ -173,12 +174,26 @@ const ElectricBorder = ({
     };
 
     let { width, height } = updateSize();
-    let lastDpr = Math.min(window.devicePixelRatio || 1, 2);
+    let lastDpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
     const drawElectricBorder = currentTime => {
       if (!canvas || !ctx) return;
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Skip GPU work while offscreen / tab hidden — keep the loop alive
+      // so animation resumes seamlessly when visible again.
+      if (!visibleRef.current || document.hidden) {
+        lastFrameTimeRef.current = currentTime;
+        animationRef.current = requestAnimationFrame(drawElectricBorder);
+        return;
+      }
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        lastFrameTimeRef.current = currentTime;
+        animationRef.current = requestAnimationFrame(drawElectricBorder);
+        return;
+      }
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       if (dpr !== lastDpr) {
         lastDpr = dpr;
         const newSize = updateSize();
@@ -265,6 +280,15 @@ const ElectricBorder = ({
     });
     resizeObserver.observe(container);
 
+    // Pause the electric loop while offscreen.
+    const io = new IntersectionObserver(
+      entries => {
+        visibleRef.current = entries[0]?.isIntersecting ?? true;
+      },
+      { rootMargin: '120px' }
+    );
+    io.observe(container);
+
     // Start animation
     animationRef.current = requestAnimationFrame(drawElectricBorder);
 
@@ -272,6 +296,7 @@ const ElectricBorder = ({
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      io.disconnect();
       resizeObserver.disconnect();
     };
   }, [color, speed, chaos, borderRadius, octavedNoise, getRoundedRectPoint]);

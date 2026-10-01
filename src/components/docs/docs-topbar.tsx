@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import { GithubIcon } from "@/components/ui/github-icon";
+import Logo from "@/components/ui/logo";
 
 const REPO = "https://github.com/ankitkumar131/mycode-ai";
 
@@ -11,17 +12,7 @@ export default function DocsTopbar() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-ink-950/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-coral-500 to-teal-500">
-              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M8 7 4 12l4 5" />
-                <path d="M16 7l4 5-4 5" />
-              </svg>
-            </span>
-            <span className="text-lg font-bold text-white">
-              My<span className="text-gradient">Code</span>
-            </span>
-          </Link>
+          <Logo href="/" />
           <span className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-slate-400 sm:flex">
             <BookOpen className="h-3.5 w-3.5" /> Docs
           </span>

@@ -150,6 +150,8 @@ const TextType = ({
   const shouldHideCursor =
     hideCursorWhileTyping && (currentCharIndex < textArray[currentTextIndex].length || isDeleting);
 
+  /* eslint-disable react-hooks/refs -- `Component` defaults to the host element
+     'div', for which passing a ref is valid; the rule cannot infer that. */
   return createElement(
     Component,
     {
@@ -169,6 +171,7 @@ const TextType = ({
       </span>
     )
   );
+  /* eslint-enable react-hooks/refs */
 };
 
 export default TextType;

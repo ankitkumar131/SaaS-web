@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import AnimatedContent from "@/components/react-bits/AnimatedContent/AnimatedContent";
 import SplitText from "@/components/react-bits/SplitText/SplitText";
+import BlurText from "@/components/react-bits/BlurText/BlurText";
 
 export function Reveal({
   children,
@@ -13,17 +14,19 @@ export function Reveal({
   once = true,
 }: {
   children: ReactNode;
+  /** Millisecond delay — converted to seconds for GSAP's AnimatedContent. */
   delay?: number;
   distance?: number;
   direction?: "vertical" | "horizontal";
   className?: string;
   once?: boolean;
 }) {
+  void once;
   return (
     <AnimatedContent
       distance={distance}
       direction={direction}
-      delay={delay}
+      delay={delay / 1000}
       duration={0.8}
       className={className}
       threshold={0.15}
@@ -83,19 +86,29 @@ export function SectionHeading({
         to={{ opacity: 1, y: 0 }}
         delay={40}
         duration={0.9}
-        className={`text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl ${
-          align === "center" ? "justify-center" : ""
+        textAlign={align === "center" ? "center" : "left"}
+        className={`block w-full text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl ${
+          align === "center" ? "text-center" : "text-left"
         }`}
       />
       {highlight && (
-        <div className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+        <div
+          className={`w-full text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl ${
+            align === "center" ? "text-center" : "text-left"
+          }`}
+        >
           <span className="text-gradient">{highlight}</span>
         </div>
       )}
       {subtitle && (
-        <Reveal delay={120} distance={30}>
-          <p className="text-base leading-relaxed text-slate-400 sm:text-lg">{subtitle}</p>
-        </Reveal>
+        <BlurText
+          text={subtitle}
+          delay={22}
+          animateBy="words"
+          className={`text-base leading-relaxed text-slate-400 sm:text-lg ${
+            align === "center" ? "text-center" : "text-left"
+          }`}
+        />
       )}
     </div>
   );

@@ -56,7 +56,18 @@ export default function SmoothScroll() {
     };
     document.addEventListener("click", onClick);
 
+    // Refresh ScrollTrigger measurements once layout settles
+    // (fonts, images, late content) so reveals trigger at the right spot.
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refresh);
+    if (typeof document !== "undefined" && document.fonts?.ready) {
+      document.fonts.ready.then(refresh).catch(() => {});
+    }
+    const refreshTimer = setTimeout(refresh, 1500);
+
     return () => {
+      window.removeEventListener("load", refresh);
+      clearTimeout(refreshTimer);
       document.removeEventListener("click", onClick);
       gsap.ticker.remove(tick);
       lenis?.destroy();
