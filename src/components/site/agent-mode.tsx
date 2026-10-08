@@ -14,30 +14,30 @@ import {
 } from "lucide-react";
 import { TerminalReplay } from "@/components/ui/code-block";
 import { SectionHeading, Reveal } from "./primitives";
+import { AGENT_TOOLS, type AgentToolName } from "@/lib/mycode";
 
 const TOOLS = [
   { icon: FileText, name: "read_file", desc: "Read files & line ranges" },
-  { icon: PenLine, name: "write_file", desc: "Create / overwrite (confirmed)" },
-  { icon: Wrench, name: "edit_file", desc: "Surgical find-and-replace" },
-  { icon: FolderOpen, name: "list_directory", desc: "List with metadata" },
-  { icon: FolderSearch, name: "search_files", desc: "Glob pattern search" },
-  { icon: ScanSearch, name: "search_code", desc: "Regex across the project" },
-  { icon: Terminal, name: "run_command", desc: "Shell with safety guards" },
+  { icon: PenLine, name: "write_file", desc: "Writes (default approval)" },
+  { icon: Wrench, name: "patch", desc: "Replace a block of text" },
+  { icon: FolderOpen, name: "list_dir", desc: "List files & directories" },
+  { icon: FolderSearch, name: "glob", desc: "Find files by glob pattern" },
+  { icon: ScanSearch, name: "search_files", desc: "Search file contents" },
+  { icon: Terminal, name: "terminal", desc: "Shell with safety guards" },
   { icon: Globe, name: "web_search", desc: "Look things up live" },
-];
+] satisfies { icon: typeof FileText; name: AgentToolName; desc: string }[];
 
 const LOOP = ["Observe", "Think", "Plan", "Act", "Repeat"];
 
 const AGENT_TERMINAL = [
-  { text: "mycode agent", tone: "cmd" as const },
-  { text: "> refactor src/auth.js to async/await", tone: "out" as const },
+  { text: 'mycode agent "refactor src/auth.js to async/await"', tone: "cmd" as const },
   { text: "🤖 planning steps…", tone: "dim" as const },
   { text: "✓ read_file    src/auth.js", tone: "ok" as const },
-  { text: "✓ search_code  \"callback\"", tone: "ok" as const },
-  { text: "✓ edit_file    src/auth.js  (4 edits)", tone: "ok" as const },
-  { text: "✓ run_command  npm test", tone: "ok" as const },
-  { text: "  24 passed, 0 failed", tone: "out" as const },
-  { text: "Done — task complete.", tone: "ok" as const },
+  { text: "✓ search_files  content=\"callback\"", tone: "ok" as const },
+  { text: "Approval requested before file edits", tone: "prompt" as const },
+  { text: "✓ patch        src/auth.js", tone: "ok" as const },
+  { text: "✓ terminal     npm test", tone: "ok" as const },
+  { text: "Review the diff and test results.", tone: "out" as const },
 ];
 
 export default function AgentMode() {
@@ -55,11 +55,17 @@ export default function AgentMode() {
               eyebrow="Agent mode"
               title="Hand it the wheel."
               highlight="It does the work."
-              subtitle="Agent mode gives MyCode autonomous superpowers — it reads your codebase, plans, and executes multi-step tasks with built-in tools."
+              subtitle={`Agent mode plans and works on multi-step tasks with ${AGENT_TOOLS.length} built-in tools, including memory, delegation, questions, and live todo tracking.`}
             />
 
             <Reveal delay={80} distance={30}>
-              <div className="mt-8 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <p className="mt-8 text-sm text-slate-400">
+                A few core tools —{" "}
+                <a href="/docs#agent" className="text-teal-300 underline underline-offset-4">
+                  see all {AGENT_TOOLS.length} built-in tools
+                </a>.
+              </p>
+              <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {TOOLS.map((t) => {
                   const Icon = t.icon;
                   return (
@@ -98,8 +104,10 @@ export default function AgentMode() {
               <div className="mt-6 flex items-start gap-3 rounded-xl border border-teal-400/20 bg-teal-500/5 p-4">
                 <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-teal-300" />
                 <p className="text-sm text-slate-300">
-                  <span className="font-semibold text-white">Safety by design.</span> File writes and dangerous
-                  commands (rm, format…) always require your explicit confirmation. You stay in control.
+                  <span className="font-semibold text-white">Confirmed by default.</span> File writes and dangerous
+                  commands prompt for approval. Chat prompts can be disabled with --yolo / --allow-all,
+                  /allow-all, or settings.{" "}
+                  <a href="/docs#agent" className="text-teal-300 underline underline-offset-4">Review the safety options</a>.
                 </p>
               </div>
             </Reveal>
@@ -109,7 +117,7 @@ export default function AgentMode() {
           <Reveal delay={120} direction="horizontal" distance={60}>
             <div className="relative">
               <div className="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-tr from-coral-500/10 via-transparent to-teal-500/10 blur-2xl" />
-              <TerminalReplay lines={AGENT_TERMINAL} startDelay={200} />
+              <TerminalReplay lines={AGENT_TERMINAL} startDelay={200} title="mycode — illustrative agent workflow" />
             </div>
           </Reveal>
         </div>

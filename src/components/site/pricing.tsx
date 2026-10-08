@@ -3,6 +3,7 @@
 import { Check, Sparkles, ArrowRight } from "lucide-react";
 import { SectionHeading, Reveal } from "./primitives";
 import StarBorder from "@/components/react-bits/StarBorder/StarBorder";
+import { AGENT_TOOLS, APP_REPO, CLI_COMMANDS } from "@/lib/mycode";
 
 type Tier = {
   name: string;
@@ -10,7 +11,7 @@ type Tier = {
   period: string;
   tagline: string;
   featured?: boolean;
-  soon?: boolean;
+  roadmap?: boolean;
   cta: string;
   ctaHref: string;
   features: string[];
@@ -21,44 +22,44 @@ const TIERS: Tier[] = [
     name: "Community",
     price: "$0",
     period: "forever · MIT",
-    tagline: "The full agent, free and open source. Everything runs locally with your own keys.",
+    tagline: "The full CLI, free and open source. It runs on your machine; inference uses your configured local or cloud providers.",
     featured: true,
     cta: "Install now",
     ctaHref: "#get-started",
     features: [
-      "All 9 CLI commands",
-      "Any AI provider + auto failover",
-      "Autonomous agent mode (8 tools)",
+      `${CLI_COMMANDS.length} core CLI commands + aliases`,
+      "Native & OpenAI-compatible providers + failover",
+      `${AGENT_TOOLS.length} built-in agent tools`,
       "MYCODE.md project context",
-      "SDK, plugins & custom providers",
-      "A2A protocol server",
-      "Standalone binary builds",
+      "MCP server tools in chat — included",
+      "SKILL.md skills & custom slash commands",
+      "Saved sessions & resume controls",
+      "Self-contained JS bundle (Node.js 20+)",
     ],
   },
   {
     name: "Pro",
-    price: "Soon",
-    period: "on the roadmap",
-    tagline: "A hosted layer for individuals who want the dashboard and editor integrations.",
-    soon: true,
-    cta: "Join the waitlist",
-    ctaHref: "https://github.com/ankitkumar131/mycode-ai",
+    price: "Planned",
+    period: "not available yet",
+    tagline: "A planned hosted layer for individuals who want dashboards and editor integrations.",
+    roadmap: true,
+    cta: "Follow on GitHub",
+    ctaHref: APP_REPO,
     features: [
       "Web dashboard",
       "VS Code extension",
-      "MCP (Model Context Protocol)",
       "Managed provider relay",
       "Conversation history sync",
     ],
   },
   {
     name: "Enterprise",
-    price: "Custom",
-    period: "talk to us",
-    tagline: "For teams that need governance, isolation, and support around the agent.",
-    soon: true,
-    cta: "Contact us",
-    ctaHref: "https://github.com/ankitkumar131/mycode-ai",
+    price: "Planned",
+    period: "not available yet",
+    tagline: "Planned governance, isolation, and support for teams using the agent.",
+    roadmap: true,
+    cta: "Discuss team needs",
+    ctaHref: `${APP_REPO}/issues`,
     features: [
       "SSO / SAML",
       "Air-gapped & on-prem",
@@ -77,7 +78,7 @@ export default function Pricing() {
           eyebrow="Pricing"
           title="Free and open source,"
           highlight="forever"
-          subtitle="The entire agent is MIT-licensed and runs on your machine. Paid layers are optional and on the roadmap."
+          subtitle="The MIT-licensed CLI runs on your machine with your own providers. Hosted Pro and Enterprise layers are plans, not available products."
         />
 
         <div className="mt-14 grid items-stretch gap-6 lg:grid-cols-3">
@@ -102,6 +103,11 @@ export default function Pricing() {
             </Reveal>
           ))}
         </div>
+        <p className="mx-auto mt-6 max-w-3xl text-center text-sm leading-relaxed text-slate-500">
+          No MyCode subscription is required. Provider API usage may have its own costs.
+          The CLI contacts the npm registry once per run to check for updates (3-second timeout);
+          cloud providers, web tools, and MCP servers may also use the network.
+        </p>
       </div>
     </section>
   );
@@ -112,7 +118,7 @@ function TierBody({ tier }: { tier: Tier }) {
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-white">{tier.name}</h3>
-        {tier.soon && (
+        {tier.roadmap && (
           <span className="rounded-full bg-white/5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 ring-1 ring-white/10">
             Roadmap
           </span>

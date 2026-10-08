@@ -3,25 +3,14 @@
 import CountUp from "@/components/react-bits/CountUp/CountUp";
 import { Reveal } from "./primitives";
 
-const PROVIDERS = [
-  "OpenRouter",
-  "OpenAI",
-  "NVIDIA NIM",
-  "Ollama",
-  "Groq",
-  "Together AI",
-  "Fireworks AI",
-  "Mistral AI",
-  "DeepSeek",
-  "Azure OpenAI",
-  "LM Studio",
-  "Any OpenAI-compatible API",
-];
+import { AGENT_TOOLS, CLI_COMMANDS, PROVIDERS, PROVIDER_TYPES } from "@/lib/mycode";
+
+const PROVIDER_NAMES = [...PROVIDERS.map((provider) => provider.name), "Any OpenAI-compatible API"];
 
 const STATS = [
-  { value: 100, suffix: "%", label: "OpenAI-compatible", sub: "works with any endpoint" },
-  { value: 8, suffix: "", label: "Agent tools", sub: "read · write · search · run" },
-  { value: 9, suffix: "", label: "CLI commands", sub: "chat · agent · fix · review" },
+  { value: PROVIDER_TYPES.length, suffix: "", label: "Wizard provider types", sub: "native & compatible APIs" },
+  { value: AGENT_TOOLS.length, suffix: "", label: "Built-in agent tools", sub: "plus MCP tools in chat" },
+  { value: CLI_COMMANDS.length, suffix: "", label: "Core CLI commands", sub: "plus run & setup aliases" },
   { value: 0, suffix: "", label: "Vendor lock-in", sub: "your keys, your models" },
 ];
 
@@ -51,11 +40,11 @@ export default function SocialProof() {
         <Reveal delay={120} distance={20}>
           <div className="mt-12">
             <p className="mb-5 text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-              One agent · every major provider
+              Native APIs + OpenAI-compatible endpoints
             </p>
             <div className="mask-fade-x relative overflow-hidden">
               <div className="flex w-max animate-marquee items-center gap-3">
-                {[...PROVIDERS, ...PROVIDERS].map((p, i) => (
+                {[...PROVIDER_NAMES, ...PROVIDER_NAMES].map((p, i) => (
                   <span
                     key={`${p}-${i}`}
                     className="flex items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-slate-300"

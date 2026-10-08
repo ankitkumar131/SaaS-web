@@ -98,23 +98,30 @@ export function DocTable({
   head,
   rows,
 }: {
-  head: [string, string];
-  rows: [string, string][];
+  head: readonly string[];
+  rows: readonly (readonly string[])[];
 }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-white/10">
+    <div className="overflow-x-auto rounded-xl border border-white/10">
       <table className="w-full text-left text-sm">
         <thead className="bg-ink-850/70 text-xs uppercase tracking-wider text-slate-400">
           <tr>
-            <th className="px-4 py-3 font-semibold">{head[0]}</th>
-            <th className="px-4 py-3 font-semibold">{head[1]}</th>
+            {head.map((label) => (
+              <th key={label} scope="col" className="px-4 py-3 font-semibold">{label}</th>
+            ))}
           </tr>
         </thead>
         <tbody className="divide-y divide-white/5">
-          {rows.map(([a, b], i) => (
+          {rows.map((cells, i) => (
             <tr key={i} className="transition hover:bg-white/[0.02]">
-              <td className="px-4 py-3 font-mono text-[13px] text-teal-300">{a}</td>
-              <td className="px-4 py-3 text-slate-300">{b}</td>
+              {cells.map((cell, j) => (
+                <td
+                  key={j}
+                  className={`px-4 py-3 ${j === 0 ? "font-mono text-[13px] text-teal-300" : "text-slate-300"}`}
+                >
+                  {cell}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>

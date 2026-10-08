@@ -9,53 +9,27 @@ import {
   Callout,
   DocTable,
 } from "@/components/docs/doc-primitives";
-
-const REPO = "https://github.com/ankitkumar131/mycode-ai";
-
-const WIZARD = `$ mycode init
-
-⚡ MyCode Setup Wizard
-
-? Priority: 1
-? Provider name: groq
-? Choose your AI provider: ⚙️  Custom (any OpenAI-compatible endpoint)
-? Enter the model identifier: llama-3.1-70b-versatile
-? Enter your API key: gsk_xxxxxxxxxxxxxxx
-? Enter the API base URL: https://api.groq.com/openai/v1
-
-✓ Added provider: groq`;
-
-const SETTINGS_JSON = `{
-  "providers": [
-    {
-      "priority": 1,
-      "name": "my-openrouter",
-      "api_provider": "openrouter",
-      "model": "google/gemini-2.5-flash",
-      "api_key": "sk-or-...",
-      "base_url": "https://openrouter.ai/api/v1",
-      "read": true,
-      "write": true,
-      "max_retries": 3
-    },
-    {
-      "priority": 2,
-      "name": "local-ollama",
-      "api_provider": "ollama",
-      "model": "llama3.1:8b",
-      "base_url": "http://localhost:11434",
-      "read": true,
-      "write": true,
-      "max_retries": 3
-    }
-  ],
-  "preferences": {
-    "theme": "dark",
-    "confirm_writes": true,
-    "confirm_commands": true,
-    "log_conversations": true
-  }
-}`;
+import {
+  AGENT_TOOLS,
+  APP_REPO,
+  CHAT_OPTIONS,
+  CLI_ALIASES,
+  CLI_COMMANDS,
+  CONFIG_COMMANDS,
+  FAILOVER_REACTIONS,
+  INSTALL_COMMAND,
+  MCP_SETTINGS_EXAMPLE,
+  MYCODE_VERSION,
+  PROVIDERS,
+  PROVIDER_SETUP_LABELS,
+  PROVIDER_TYPES,
+  QUICK_COMMANDS_EXAMPLE,
+  SETTINGS_EXAMPLE,
+  SETUP_TRANSCRIPT,
+  SKILL_EXAMPLE,
+  VERIFIED_DATE,
+  WEBSITE_REPO,
+} from "@/lib/mycode";
 
 const MYCODE_MD = `# Project: My Awesome App
 
@@ -75,51 +49,32 @@ const MYCODE_MD = `# Project: My Awesome App
 - Use Tailwind CSS for styling
 - Follow the repository's PR template`;
 
-const SDK_CODE = `import { MyCodeSDK } from '@mycode/sdk';
-
-const sdk = new MyCodeSDK();
-
-// Register a custom tool
-sdk.registerTool({
-  name: 'deploy',
-  description: 'Deploy the application',
-  parameters: { environment: { type: 'string' } },
-  execute: async ({ environment }) => {
-    return { success: true, url: \`https://\${environment}.myapp.com\` };
-  }
-});
-
-// Register a custom provider
-sdk.registerProvider({
-  name: 'my-custom-llm',
-  chat: async (messages) => { /* ... */ },
-  isAvailable: async () => true,
-});`;
-
 export const metadata = {
   title: "Documentation",
-  description: "Install, configure, and use MyCode-AI — the universal AI coding agent.",
+  description: "Install, configure, and use MyCode-AI — providers, agent tools, skills, and MCP.",
 };
 
 export default function DocsPage() {
   return (
     <div className="mx-auto max-w-3xl">
-      {/* Hero */}
       <Reveal distance={16}>
-        <Eyebrow>Documentation</Eyebrow>
+        <Eyebrow>Documentation · CLI v{MYCODE_VERSION}</Eyebrow>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
           Install &amp; use <span className="text-gradient">MyCode-AI</span>
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-slate-400">
-          Everything you need to get the universal AI coding agent running in your terminal — from
-          install to autonomous agent mode.
+          Get the coding agent running in your terminal — from provider setup to agent tools,
+          reusable skills, and MCP servers.
+        </p>
+        <p className="mt-3 text-xs text-slate-500">
+          Covers CLI v{MYCODE_VERSION} · Content verified {VERIFIED_DATE}.
         </p>
         <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="flex-1">
-            <CommandChip command="npm install -g @ankitkumar131/mycode-ai" />
+            <CommandChip command={INSTALL_COMMAND} />
           </div>
           <a
-            href={`${REPO}/edit/main/README.md`}
+            href={`${WEBSITE_REPO}/edit/main/src/app/docs/page.tsx`}
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-teal-300"
@@ -132,14 +87,13 @@ export default function DocsPage() {
       <div className="mt-8">
         <DocSection id="introduction" title="Introduction">
           <P>
-            <InlineCode>MyCode</InlineCode> is a universal AI coding agent that lives in your terminal.
-            Think <em>Claude Code</em>, but it works with <strong className="text-white">any AI provider that has an API</strong> —
-            you just bring your API key.
+            <InlineCode>MyCode</InlineCode> is an open-source AI coding agent that lives in your
+            terminal. Bring your own API key or connect a local model — no MyCode account is needed.
           </P>
           <P>
-            It speaks a universal OpenAI-compatible interface, so it works out of the box with OpenRouter,
-            NVIDIA NIM, Ollama, OpenAI, Groq, Together AI, Mistral, Fireworks, DeepSeek, or your own
-            self-hosted endpoint.
+            It supports OpenAI-compatible chat-completions APIs, the native Anthropic Messages API,
+            and native Ollama. Services such as Groq, Together AI, NVIDIA NIM, and LM Studio can be
+            configured with the <InlineCode>custom</InlineCode> type and their base URL.
           </P>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="rounded-xl border border-coral-400/20 bg-coral-500/5 p-4">
@@ -149,7 +103,7 @@ export default function DocsPage() {
                   "Locked into a single AI provider",
                   "No fallback when services go down",
                   "Expensive API costs, no alternatives",
-                  "Can't use local models for privacy",
+                  "Can't choose local models for inference",
                 ]}
               />
             </div>
@@ -157,114 +111,171 @@ export default function DocsPage() {
               <h3 className="text-sm font-semibold text-teal-300">The MyCode way</h3>
               <List
                 items={[
-                  "Any AI provider — just enter API details",
-                  "Automatic failover keeps you coding",
-                  "Free tiers via OpenRouter & Ollama",
-                  "Local models — fully private & offline",
+                  "Choose native or OpenAI-compatible providers",
+                  "Automatic failover across configured providers",
+                  "Use your own keys or local models",
+                  "Free CLI, including skills and MCP support",
                 ]}
               />
             </div>
           </div>
+          <Callout type="info" title="Local CLI, configured network access">
+            The CLI runs on your machine, but cloud inference sends requests to your configured
+            providers. Local models keep inference on their host. MyCode also contacts the npm
+            registry once per run to check for updates (a 3-second timeout); web tools and MCP servers
+            can make their own network requests. Local inference does not mean every operation is offline.
+          </Callout>
         </DocSection>
 
         <DocSection id="install" title="Installation">
           <P>
             MyCode requires <InlineCode>Node.js 20+</InlineCode>. Install it globally from npm:
           </P>
-          <CodeBlock code="npm install -g @ankitkumar131/mycode-ai" filename="terminal" />
-          <P>Verify the install and check your system:</P>
-          <CodeBlock code={"mycode --version\nmycode doctor   # system diagnostics & provider health"} filename="terminal" />
-          <Callout type="tip" title="No Node.js?">
-            You can also build a <strong>standalone binary</strong> (Single Executable Application) that runs
-            without Node.js — just download and run it anywhere.
+          <CodeBlock code={INSTALL_COMMAND} filename="terminal" />
+          <P>Verify the version and inspect your environment:</P>
+          <CodeBlock
+            code={"mycode --version\nmycode doctor   # environment and configuration information"}
+            filename="terminal"
+          />
+          <Callout type="info" title="Diagnostics are not connectivity tests">
+            <InlineCode>doctor</InlineCode> shows Node, configuration, provider names, skills, and
+            terminal information. It does not probe provider connectivity.
+          </Callout>
+          <Callout type="tip" title="Self-contained JavaScript bundle">
+            The application&apos;s source build produces{" "}
+            <InlineCode>packages/cli/dist/mycode-standalone.cjs</InlineCode> with its dependencies
+            bundled. It still requires <strong>Node.js 20+</strong>. Native executable downloads are
+            not available for this release.
           </Callout>
         </DocSection>
 
         <DocSection id="quick-start" title="Quick start">
           <P>
-            Run the setup wizard. It asks for just <strong className="text-white">four things</strong>:
-            provider, model, API key, and base URL.
+            Run <InlineCode>mycode init</InlineCode>. For an API provider, the free-text wizard asks
+            nine questions: priority, provider name, API provider type, model, API key, base URL,
+            read permission, write permission, and maximum retries. Ollama skips the API-key question.
           </P>
-          <CodeBlock code={WIZARD} filename="mycode init" />
+          <CodeBlock code={SETUP_TRANSCRIPT} filename="Example setup transcript" showCopy={false} />
+          <P>
+            This example enters <InlineCode>custom</InlineCode> for Groq. The API key and home
+            directory are placeholders; blank permission and retry answers accept the shown defaults.
+            Choose a model currently offered by your provider.
+          </P>
           <P>Then start coding:</P>
           <CodeBlock code="mycode chat" filename="terminal" />
           <Callout type="info" title="Add multiple providers">
-            You can add several providers during setup for automatic failover. If provider #1 goes down,
-            MyCode seamlessly switches to #2, then #3, and so on.
+            Run <InlineCode>mycode init</InlineCode> again to choose <strong>Add a new provider</strong>,{" "}
+            <strong>Change provider priorities</strong>, or <strong>Exit</strong>. Lower priority
+            numbers come first. If a provider fails, MyCode can continue with another configured provider.
           </Callout>
         </DocSection>
 
         <DocSection id="providers" title="Providers">
           <P>
-            Pick a preset during <InlineCode>mycode init</InlineCode>, or choose{" "}
-            <strong className="text-white">Custom</strong> to connect to any OpenAI-compatible endpoint.
+            The wizard accepts five API provider types:{" "}
+            {PROVIDER_TYPES.map((type, i) => (
+              <span key={type}>
+                {i > 0 && ", "}<InlineCode>{type}</InlineCode>
+              </span>
+            ))}.
+            Anthropic and Ollama use their native APIs; the other types use the OpenAI-compatible path.
+          </P>
+          <P>
+            Only Anthropic, OpenRouter, and Ollama have URLs filled by the wizard. For OpenAI, leaving
+            the URL blank uses the OpenAI SDK&apos;s default. The remaining examples below require{" "}
+            <InlineCode>custom</InlineCode> and a manually entered URL — they are not wizard shortcuts.
           </P>
           <DocTable
-            head={["Provider", "API base URL"]}
-            rows={[
-              ["OpenRouter", "https://openrouter.ai/api/v1"],
-              ["OpenAI", "https://api.openai.com/v1"],
-              ["NVIDIA NIM", "https://integrate.api.nvidia.com/v1"],
-              ["Ollama (local)", "http://localhost:11434"],
-              ["Groq", "https://api.groq.com/openai/v1"],
-              ["Together AI", "https://api.together.xyz/v1"],
-              ["Fireworks AI", "https://api.fireworks.ai/inference/v1"],
-              ["Mistral AI", "https://api.mistral.ai/v1"],
-              ["DeepSeek", "https://api.deepseek.com/v1"],
-              ["LM Studio (local)", "http://localhost:1234/v1"],
-            ]}
+            head={["Provider", "Setup", "API base URL"]}
+            rows={PROVIDERS.map((provider) => [
+              provider.name,
+              `${provider.apiProvider} · ${PROVIDER_SETUP_LABELS[provider.urlSource]}`,
+              provider.url,
+            ])}
           />
           <Callout type="tip" title="Custom provider">
-            Use the <strong>Custom</strong> provider type to connect to anything that follows the OpenAI
-            chat-completions format — Azure OpenAI, self-hosted vLLM, or your own gateway.
+            Use <InlineCode>custom</InlineCode> for an endpoint that accepts the OpenAI
+            chat-completions format, such as self-hosted vLLM or your own compatible gateway. The
+            wizard does not offer a separate NVIDIA NIM type; use its Custom URL above.
+          </Callout>
+        </DocSection>
+
+        <DocSection id="failover" title="Automatic failover">
+          <P>
+            Providers are chained by priority. Recognized rate limits, server, authentication,
+            context-limit, and connection errors can switch the request to the next provider while
+            preserving the conversation. Continuation still needs a working, configured fallback.
+          </P>
+          <DocTable
+            head={["Failure", "Reaction"]}
+            rows={FAILOVER_REACTIONS.map((error) => [`${error.code} · ${error.name}`, error.behavior])}
+          />
+          <Callout type="info" title="Retries and request-local skips">
+            On the OpenAI-compatible path, retry/backoff is handled by the provider SDK according
+            to <InlineCode>maxRetries</InlineCode>. MyCode parses <InlineCode>Retry-After</InlineCode>{" "}
+            but does not use it to schedule a cooldown. Skips last for the current request; providers
+            are not permanently disabled and can be tried again later. Context sizing and compaction
+            also account for the current provider&apos;s window.
           </Callout>
         </DocSection>
 
         <DocSection id="commands" title="CLI commands">
+          <P>
+            There are {CLI_COMMANDS.length} core commands. Aliases and help/version flags are listed
+            separately, not counted as additional commands.
+          </P>
           <DocTable
             head={["Command", "Description"]}
-            rows={[
-              ["mycode chat", "Start an interactive AI chat session"],
-              ["mycode agent", "Start the AI agent with autonomous tool use"],
-              ["mycode explain <file>", "Get an AI explanation of any code file"],
-              ["mycode fix <file>", "Detect and fix bugs in your code"],
-              ["mycode edit <file>", "Edit code with AI assistance"],
-              ["mycode review <file>", "AI-powered code review with suggestions"],
-              ["mycode config", "Manage configuration (set / get / list / reset)"],
-              ["mycode init", "Set up providers interactively"],
-              ["mycode doctor", "System diagnostics & provider health check"],
-            ]}
+            rows={CLI_COMMANDS.map((command) => [command.command, command.description])}
           />
-          <P>Global options work with any command:</P>
+          <DocTable
+            head={["Alias", "Description"]}
+            rows={CLI_ALIASES.map((alias) => [alias.command, alias.description])}
+          />
+          <P>
+            Use <InlineCode>mycode --help</InlineCode> for usage and{" "}
+            <InlineCode>mycode --version</InlineCode> for the installed CLI version.
+          </P>
+          <h3 className="pt-3 text-lg font-semibold text-white">Chat options</h3>
+          <P>
+            These options belong to <InlineCode>chat</InlineCode> (and its <InlineCode>run</InlineCode>{" "}
+            alias), not to every CLI command. <InlineCode>--model</InlineCode> selects a configured
+            provider/model for chat; it is not a universal command option.
+          </P>
+          <DocTable
+            head={["Option", "Description"]}
+            rows={CHAT_OPTIONS.map((option) => [option.option, option.description])}
+          />
           <CodeBlock
-            code={"mycode <command> --provider <name>   # override default provider\nmycode <command> --model <name>      # override default model\nmycode <command> --verbose           # enable verbose logging\nmycode <command> --no-color          # disable colored output"}
-            filename="options"
+            code={'mycode chat --model google/gemini-2.5-flash\nmycode chat -q "Explain this project without changing files"\nmycode chat --continue\nmycode sessions   # find IDs for chat --resume'}
+            filename="terminal"
           />
+          <h3 className="pt-3 text-lg font-semibold text-white">Inside an interactive chat</h3>
+          <P>
+            Type <InlineCode>/help</InlineCode> to discover slash commands. For example,{" "}
+            <InlineCode>/review</InlineCode> is a chat slash command, not a standalone CLI command;{" "}
+            <InlineCode>/model</InlineCode> switches models, <InlineCode>/skills</InlineCode> shows
+            skills, and <InlineCode>/mcp</InlineCode> shows configured MCP servers.
+          </P>
         </DocSection>
 
         <DocSection id="agent" title="Agent mode">
           <P>
-            Agent mode gives MyCode autonomous superpowers — it reads your codebase, understands context,
-            plans actions, and executes them with built-in tools until the task is complete.
+            Agent mode reads your codebase, plans actions, and uses tools to work on multi-step tasks.
+            There are {AGENT_TOOLS.length} built-in tools, using the canonical names below. Tool settings
+            can restrict this set, and MCP servers can add more tools in chat.
           </P>
-          <CodeBlock code="mycode agent" filename="terminal" />
+          <CodeBlock code={'mycode agent "Review this project and propose tests"'} filename="terminal" />
           <DocTable
             head={["Tool", "Description"]}
-            rows={[
-              ["read_file", "Read file contents with optional line ranges"],
-              ["write_file", "Create or overwrite files (with confirmation)"],
-              ["edit_file", "Surgical find-and-replace editing"],
-              ["list_directory", "List directory contents with metadata"],
-              ["search_files", "Glob-based file pattern search"],
-              ["search_code", "Regex code search across your project"],
-              ["run_command", "Execute shell commands (with safety guards)"],
-              ["web_search", "Search the web for information"],
-            ]}
+            rows={AGENT_TOOLS.map((tool) => [tool.name, tool.description])}
           />
-          <Callout type="warn" title="Safety by design">
-            All file writes and dangerous shell commands (<InlineCode>rm</InlineCode>,{" "}
-            <InlineCode>format</InlineCode>, …) require your explicit confirmation before execution. You
-            always stay in control.
+          <Callout type="warn" title="Confirmed by default, not unconditionally">
+            File writes and dangerous shell commands are confirmed by default. In chat,{" "}
+            <InlineCode>--yolo</InlineCode> (alias <InlineCode>--allow-all</InlineCode>),{" "}
+            <InlineCode>/allow-all</InlineCode>, or the <InlineCode>confirmWrites</InlineCode> /{" "}
+            <InlineCode>confirmCommands</InlineCode> preferences can disable approval prompts. Only
+            opt out for tasks you trust. Some command patterns remain blocked by the safety guards.
           </Callout>
           <P>
             The agent loop: <InlineCode>Observe → Think → Plan → Act → Repeat</InlineCode>.
@@ -273,51 +284,125 @@ export default function DocsPage() {
 
         <DocSection id="configuration" title="Configuration">
           <P>
-            Your provider configuration lives in <InlineCode>~/.mycode/settings.json</InlineCode>. Manage it
-            from the CLI:
+            Your configuration lives in <InlineCode>~/.mycode/settings.json</InlineCode>. The supported
+            config subcommands are:
           </P>
+          <DocTable
+            head={["Command", "Description"]}
+            rows={CONFIG_COMMANDS.map((command) => [command.command, command.description])}
+          />
           <CodeBlock
-            code={"mycode config list     # view current config\nmycode config test     # test all provider connections\nmycode config reset    # reset configuration"}
+            code={"mycode config list            # view configured providers\nmycode config test            # report initial router status, not connectivity\nmycode config remove <name>   # replace <name> with a provider name"}
             filename="terminal"
           />
-          <P>Example settings structure:</P>
-          <CodeBlock code={SETTINGS_JSON} filename="settings.json" lang="json" />
+          <Callout type="warn" title="An active status is not proof of connectivity">
+            <InlineCode>config test</InlineCode> constructs the router and prints its initial
+            in-memory status. It makes no provider request and can report an offline provider as
+            active. <InlineCode>doctor</InlineCode> does not probe providers either.
+          </Callout>
+          <P>
+            Use camelCase keys, as written by <InlineCode>mycode init</InlineCode>. Legacy snake_case
+            provider keys are accepted on read, but preference keys are not normalized — use{" "}
+            <InlineCode>confirmWrites</InlineCode>, <InlineCode>confirmCommands</InlineCode>, and{" "}
+            <InlineCode>logConversations</InlineCode>. The <InlineCode>version</InlineCode> field below
+            is the settings schema version, not the CLI version.
+          </P>
+          <CodeBlock code={SETTINGS_EXAMPLE} filename="settings.json" lang="json" />
+          <P>Additional supported settings include:</P>
+          <DocTable
+            head={["Setting", "Purpose"]}
+            rows={[
+              ["mcp.servers", "Configure MCP server commands for chat (see MCP below)"],
+              ["vimMode", "Enable Vim-style input editing"],
+              ["disabledTools", "Disable named tools by default"],
+              ["toolsets", "Restrict the enabled tool groups"],
+              ["skills.externalDirs", "Discover skills from additional directories"],
+              ["quickCommands", "Define slash commands that execute shell commands or aliases"],
+              ["personalities", "Define named system-prompt overlays"],
+              ["contextWindows", "Set approximate context windows by provider name or model"],
+            ]}
+          />
         </DocSection>
 
         <DocSection id="project-context" title="Project context (MYCODE.md)">
           <P>
-            Create a <InlineCode>.mycode/MYCODE.md</InlineCode> file to give MyCode deep knowledge of your
-            project. It&apos;s loaded into every interaction for consistent, project-aware responses.
+            Create a <InlineCode>.mycode/MYCODE.md</InlineCode> file to give MyCode knowledge of your
+            project. Its instructions are loaded into interactions for consistent, project-aware responses.
           </P>
           <CodeBlock code={MYCODE_MD} filename=".mycode/MYCODE.md" lang="markdown" />
         </DocSection>
 
-        <DocSection id="sdk" title="SDK & plugins">
+        <DocSection id="skills" title="Skills & custom slash commands">
           <P>
-            Build custom extensions with the MyCode SDK — register your own tools and providers that plug
-            straight into the agent.
+            Skills are reusable instructions stored in <InlineCode>SKILL.md</InlineCode> files. Put
+            workspace skills in <InlineCode>.mycode/skills/&lt;name&gt;/SKILL.md</InlineCode>, or user
+            skills in <InlineCode>~/.mycode/skills/&lt;name&gt;/SKILL.md</InlineCode>. List them with{" "}
+            <InlineCode>mycode skills</InlineCode> or <InlineCode>/skills</InlineCode> inside chat.
           </P>
-          <CodeBlock code={SDK_CODE} filename="plugin.ts" lang="typescript" />
+          <CodeBlock
+            code={SKILL_EXAMPLE}
+            filename=".mycode/skills/test-changes/SKILL.md"
+            lang="markdown"
+          />
           <P>
-            You can also run the <strong className="text-white">A2A protocol server</strong> for multi-agent
-            orchestration:
+            You can also store custom slash-command prompts in{" "}
+            <InlineCode>.mycode/commands/*.md</InlineCode>, or define shell/alias commands with{" "}
+            <InlineCode>quickCommands</InlineCode>. For example, merge this fragment into your settings
+            to make <InlineCode>/check</InlineCode> run the current project&apos;s test script:
           </P>
-          <CodeBlock code="mycode a2a-server --port 3000" filename="terminal" />
+          <CodeBlock code={QUICK_COMMANDS_EXAMPLE} filename="settings.json fragment" lang="json" />
+          <Callout type="info" title="Saved sessions">
+            <InlineCode>mycode sessions</InlineCode> lists saved conversations. Use{" "}
+            <InlineCode>mycode chat --continue</InlineCode> for the latest session in this directory,
+            or <InlineCode>mycode chat --resume &lt;id&gt;</InlineCode> to choose one.
+          </Callout>
+        </DocSection>
+
+        <DocSection id="mcp" title="MCP (included in the free CLI)">
+          <P>
+            Model Context Protocol support already ships in the Community CLI. Configure stdio
+            servers in <InlineCode>mcp.servers</InlineCode>; chat starts the server processes,
+            performs the MCP handshake, and makes their tools available to the agent. Use{" "}
+            <InlineCode>/mcp</InlineCode> inside chat to inspect the servers.
+          </P>
+          <P>
+            Merge this example into <InlineCode>settings.json</InlineCode> and replace the absolute
+            project path. It uses an external filesystem MCP server launched with{" "}
+            <InlineCode>npx</InlineCode>, which may download the server package from npm:
+          </P>
+          <CodeBlock code={MCP_SETTINGS_EXAMPLE} filename="settings.json fragment" lang="json" />
+          <Callout type="warn" title="Trust the servers you configure">
+            MCP servers run as child processes on your machine and expose their own capabilities.
+            Review the server and limit its allowed paths before enabling it. MCP support is free;
+            an external service may have its own costs.
+          </Callout>
+          <P>
+            Skills and MCP are the shipped extension paths. This release does not offer a published
+            plugin SDK or an A2A CLI server.
+          </P>
         </DocSection>
 
         <DocSection id="contributing" title="Contributing">
-          <P>Contributions are welcome! Here&apos;s how to get started:</P>
+          <P>
+            Contributions to the{" "}
+            <a href={APP_REPO} target="_blank" rel="noreferrer" className="text-teal-300 underline underline-offset-4">
+              application repository
+            </a>{" "}
+            are welcome. To correct these web docs, use the Edit on GitHub link above; shared command,
+            tool, and provider data lives in <InlineCode>src/lib/mycode.ts</InlineCode> in the website repository.
+          </P>
           <List
             items={[
-              "Fork the repository",
-              "Create your feature branch (git checkout -b feature/amazing-feature)",
-              "Commit your changes (git commit -m 'Add amazing feature')",
-              "Push to the branch (git push origin feature/amazing-feature)",
+              "Fork the relevant repository",
+              "Create a feature branch",
+              "Make and test your changes",
+              "Commit and push your branch",
               "Open a Pull Request",
             ]}
           />
           <Callout type="info" title="License">
-            MyCode is open source under the <strong>MIT License</strong>.
+            MyCode is open source under the <strong>MIT License</strong>. The application&apos;s{" "}
+            <InlineCode>NOTICE.md</InlineCode> records third-party attribution for the vendored Ponytail rules.
           </Callout>
         </DocSection>
       </div>

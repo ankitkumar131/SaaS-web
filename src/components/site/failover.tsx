@@ -4,20 +4,13 @@ import { motion } from "motion/react";
 import { ChevronDown, ChevronRight, AlertTriangle } from "lucide-react";
 import ScrollReveal from "@/components/react-bits/ScrollReveal/ScrollReveal";
 import { SectionHeading, Reveal } from "./primitives";
+import { FAILOVER_REACTIONS } from "@/lib/mycode";
 
 const CHAIN = [
   { label: "Your request", sub: "mycode chat", tone: "neutral" as const },
   { label: "① OpenRouter", sub: "priority 1", tone: "coral" as const },
   { label: "② Ollama", sub: "local · priority 2", tone: "teal" as const },
   { label: "③ OpenAI", sub: "priority 3", tone: "coral" as const },
-];
-
-const ERRORS = [
-  { code: "429", name: "Rate limited", behavior: "Wait briefly, then try the next provider" },
-  { code: "5xx", name: "Server error", behavior: "Immediately try the next provider" },
-  { code: "401 / 403", name: "Auth error", behavior: "Skip the provider and warn you" },
-  { code: "413", name: "Context too long", behavior: "Try next — it may have a larger window" },
-  { code: "ECONNREFUSED", name: "Connection refused", behavior: "Skip the provider (it's offline)" },
 ];
 
 const toneStyles = {
@@ -32,9 +25,9 @@ export default function Failover() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Resilience"
-          title="Never get blocked by"
-          highlight="a down provider"
-          subtitle="Chain multiple providers by priority. When one fails, MyCode fails over automatically — you just keep coding."
+          title="Keep coding through"
+          highlight="provider failures"
+          subtitle="Chain providers by priority. When one fails, MyCode can preserve context and continue with a working fallback."
         />
 
         {/* Manifesto — scrub-revealed on scroll */}
@@ -45,7 +38,7 @@ export default function Failover() {
           baseRotation={2}
           blurStrength={6}
         >
-          Rate limits. Outages. Context overflow. Your flow never breaks — MyCode just switches providers and keeps shipping.
+          Rate limits. Outages. Context limits. MyCode can switch providers and continue your task when a working fallback is available.
         </ScrollReveal>
 
         {/* Chain */}
@@ -93,7 +86,7 @@ export default function Failover() {
               <span className="text-sm font-semibold text-white">How failover reacts</span>
             </div>
             <div className="divide-y divide-white/5">
-              {ERRORS.map((e) => (
+              {FAILOVER_REACTIONS.map((e) => (
                 <div
                   key={e.code}
                   className="grid grid-cols-1 items-start gap-2 px-5 py-3.5 sm:grid-cols-[220px_minmax(0,1fr)] sm:items-center sm:gap-4"
@@ -109,6 +102,11 @@ export default function Failover() {
               ))}
             </div>
           </div>
+          <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-slate-500">
+            OpenAI-compatible retry/backoff follows the SDK&apos;s maxRetries setting. MyCode parses
+            Retry-After but does not apply a cooldown. Skips last for this request, not permanently.{" "}
+            <a href="/docs#failover" className="text-teal-300 underline underline-offset-4">Read the failover details</a>.
+          </p>
         </Reveal>
       </div>
     </section>

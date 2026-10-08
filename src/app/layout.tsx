@@ -9,19 +9,21 @@ const geistSans = GeistSans;
 const geistMono = GeistMono;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mycode-ai.dev"),
+  metadataBase: new URL("https://mycodeai.antideploy.app"),
   title: {
     default: "MyCode-AI — Your Universal AI Coding Agent",
     template: "%s · MyCode-AI",
   },
   description:
-    "Like Claude Code, but works with any AI provider. One agent, any OpenAI-compatible API, automatic failover, and autonomous tool use — straight from your terminal.",
+    "One coding agent for OpenAI-compatible APIs, Anthropic, and Ollama. Bring your own keys, use automatic failover, and work with tools, skills, and MCP in your terminal.",
   keywords: [
     "AI coding agent",
     "CLI",
     "OpenRouter",
     "Ollama",
     "OpenAI",
+    "Anthropic",
+    "MCP",
     "terminal",
     "developer tools",
     "MyCode",
@@ -30,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "MyCode-AI — Your Universal AI Coding Agent",
     description:
-      "One agent. Any AI provider. No lock-in. Just code. Bring your own API key and start coding in seconds.",
+      "Your terminal, your keys, your choice of compatible provider. An open-source coding agent with automatic failover, skills, and MCP support.",
     type: "website",
   },
 };

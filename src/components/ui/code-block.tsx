@@ -123,10 +123,12 @@ export function TerminalReplay({
   lines,
   className = "",
   startDelay = 400,
+  title = "mycode — example session",
 }: {
   lines: { text: string; tone?: "prompt" | "cmd" | "out" | "ok" | "dim" }[];
   className?: string;
   startDelay?: number;
+  title?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(0);
@@ -168,7 +170,7 @@ export function TerminalReplay({
           <span className="h-3 w-3 rounded-full bg-amber-400/80" />
           <span className="h-3 w-3 rounded-full bg-teal-400/80" />
         </span>
-        <span className="font-mono text-xs text-slate-500">mycode — zsh</span>
+        <span className="font-mono text-xs text-slate-500">{title}</span>
       </div>
       <div className="space-y-1.5 px-4 py-4 font-mono text-[13px] leading-relaxed sm:text-sm">
         {lines.slice(0, visible).map((l, i) => (

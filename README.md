@@ -1,6 +1,6 @@
 # MyCode — SaaS Website
 
-A high-converting marketing site + documentation for **[MyCode](https://github.com/ankitkumar131/mycode-ai)** — *your universal AI coding agent in the terminal* (like Claude Code, but it works with **any** AI provider).
+A high-converting marketing site + documentation for **[MyCode](https://github.com/ankitkumar131/mycode-ai)** — *your universal AI coding agent in the terminal* (OpenAI-compatible APIs, native Anthropic, and Ollama).
 
 Built with **Next.js 16**, **React 19**, **Tailwind CSS v4**, and animated components from the **[React Bits](https://reactbits.dev)** library, themed in **coral 🪸 & teal 🌊**.
 
@@ -8,7 +8,7 @@ Built with **Next.js 16**, **React 19**, **Tailwind CSS v4**, and animated compo
 
 - **Animated landing page** — Aurora WebGL background, split-text headings, animated gradients, magnetic CTAs, spotlight cards, animated stat counters, an infinite provider marquee, and an electric-border callout.
 - **Buttery smooth scrolling** — global [Lenis](https://github.com/darkroomengineering/lenis) smooth scroll wired into GSAP ScrollTrigger, so every React Bits scroll animation stays in sync.
-- **Full documentation site** (`/docs`) — install, quick start, providers, CLI commands, agent mode, configuration, project context, SDK, and contributing — with a scroll-spy sidebar.
+- **Full documentation site** (`/docs`) — install, quick start, providers, failover, CLI commands, agent tools, configuration, project context, skills, MCP, and contributing — with a scroll-spy sidebar.
 - **Coral & teal design system** — a cohesive token set defined in Tailwind's `@theme`.
 
 ## 🚀 Getting started
@@ -47,6 +47,28 @@ src/
     ui/                 # code block / terminal, icons
     smooth-scroll.tsx   # Lenis + GSAP ScrollTrigger integration
 ```
+
+## ✅ Content accuracy & checks
+
+Website copy describes **MyCode CLI 3.2.1**, verified on **2026-10-08**. The website's own npm version is separate from the CLI version.
+
+- Shared product facts and examples live in `src/lib/mycode.ts`; both the landing page and `/docs` use them.
+- There are **10 core CLI commands**, plus `run` / `setup` aliases and help/version flags. Skills and sessions are counted; code review is the `/review` chat command.
+- There are **22 built-in agent tools**. MCP can add tools in chat and is included in the free CLI, alongside skills.
+- The wizard accepts five API provider types. Only Anthropic, OpenRouter, and Ollama have wizard-filled URLs; OpenAI uses the SDK default, and other services use Custom + a manual URL.
+- Approval prompts are **on by default**, not unconditional. The source build is a JavaScript bundle that still requires Node.js 20+.
+- `doctor` and `config test` report configuration/status, not provider connectivity. The CLI's npm update check is disclosed in the site and docs.
+- Public plugin SDK, A2A server, and native executable claims are not advertised as implemented.
+
+When the CLI changes, re-verify these facts against that release, update the snapshot and examples, and run:
+
+```bash
+npm test         # content regression tests (no network requests)
+npm run lint
+npm run build
+```
+
+The web docs are maintained in `src/app/docs/page.tsx`, not rendered from the application's README. The “Edit on GitHub” link points to this website repository.
 
 ## 📄 About MyCode
 

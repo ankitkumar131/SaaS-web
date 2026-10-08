@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import SpotlightCard from "@/components/react-bits/SpotlightCard/SpotlightCard";
 import { SectionHeading, Reveal } from "./primitives";
+import { AGENT_TOOLS } from "@/lib/mycode";
 
 type Feature = {
   icon: ComponentType<{ className?: string }>;
@@ -27,7 +28,7 @@ const FEATURES: Feature[] = [
     icon: Globe,
     title: "Universal AI provider",
     description:
-      "Connect to any AI API — OpenRouter, OpenAI, Ollama, Groq, or your own endpoint. Just the URL, model, and key.",
+      "Use OpenAI-compatible APIs, native Anthropic, or Ollama. Configure your provider, model, key, and endpoint — no vendor lock-in.",
     accent: "coral",
   },
   {
@@ -41,14 +42,14 @@ const FEATURES: Feature[] = [
     icon: Bot,
     title: "Autonomous agent mode",
     description:
-      "The agent reads, writes, searches, and runs commands — planning multi-step tasks until the job is done.",
+      `Use ${AGENT_TOOLS.length} built-in tools for files, shell commands, documents, planning, memory, and sub-agent delegation.`,
     accent: "teal",
   },
   {
     icon: ShieldCheck,
     title: "Safety by design",
     description:
-      "File writes and dangerous commands always ask for confirmation. Per-provider read/write permissions keep you in control.",
+      "File writes and dangerous commands ask for confirmation by default. Chat approvals can be disabled; per-provider read/write permissions also apply.",
     accent: "coral",
   },
   {
@@ -60,30 +61,30 @@ const FEATURES: Feature[] = [
   },
   {
     icon: Puzzle,
-    title: "Extensible SDK",
+    title: "Reusable skills",
     description:
-      "Register custom tools and providers with the SDK. Build plugins that plug straight into the agent loop.",
+      "Keep repeatable procedures in SKILL.md files. Discover, load, and manage skills, or define your own slash commands.",
     accent: "teal",
   },
   {
     icon: Network,
-    title: "A2A protocol server",
+    title: "MCP tools — included",
     description:
-      "Expose capabilities over the Agent-to-Agent protocol for multi-agent orchestration across your stack.",
+      "Connect stdio MCP servers through mcp.servers and inspect them with /mcp in chat. Already shipped in the free CLI.",
     accent: "teal",
   },
   {
     icon: TerminalSquare,
     title: "Beautiful terminal UI",
     description:
-      "Rich markdown, streaming output, spinners, and color — a polished experience powered by Ink.",
+      "Rich markdown, streaming output, spinners, themes, and diff views — with custom rendering using chalk and marked.",
     accent: "coral",
   },
   {
     icon: Boxes,
-    title: "Standalone binary",
+    title: "Self-contained JS bundle",
     description:
-      "Ship as a Single Executable Application. No Node.js required — just download and run anywhere.",
+      "The source build bundles CLI dependencies into mycode-standalone.cjs. It still requires Node.js 20+; no native executable download is offered.",
     accent: "teal",
   },
 ];

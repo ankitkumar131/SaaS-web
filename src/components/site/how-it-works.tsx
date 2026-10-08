@@ -3,14 +3,15 @@
 import { Download, Settings2, MessageSquareCode } from "lucide-react";
 import { CodeBlock } from "@/components/ui/code-block";
 import { SectionHeading, Reveal } from "./primitives";
+import { INSTALL_COMMAND, SETUP_TRANSCRIPT } from "@/lib/mycode";
 
 const STEPS = [
   {
     icon: Download,
     step: "01",
     title: "Install",
-    description: "One global install. Works on any machine with Node.js 20+ — or grab the standalone binary.",
-    code: "npm install -g @ankitkumar131/mycode-ai",
+    description: "One global npm install. Requires Node.js 20+, including when using the self-contained JavaScript bundle.",
+    code: INSTALL_COMMAND,
     lang: "bash",
   },
   {
@@ -18,14 +19,8 @@ const STEPS = [
     step: "02",
     title: "Set up your provider",
     description:
-      "The wizard asks four things: provider, model, API key, and base URL. Add several for automatic failover.",
-    code: `mycode init
-
-# → Provider : Custom (any OpenAI-compatible endpoint)
-# → Model    : llama-3.1-70b-versatile
-# → API key  : sk-xxxxxxxx
-# → Base URL : https://api.groq.com/openai/v1
-✓ Added provider: groq (priority 1)`,
+      "Nine prompts cover priority, name, type, model, key, URL, read/write permissions, and retries. Ollama skips the key; rerun init to add fallbacks.",
+    code: SETUP_TRANSCRIPT,
     lang: "bash",
   },
   {
@@ -49,9 +44,9 @@ export default function HowItWorks() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="How it works"
-          title="From install to first commit in"
-          highlight="under a minute"
-          subtitle="No accounts, no dashboards, no lock-in. Just your terminal and your API key."
+          title="From install to your first task in"
+          highlight="three steps"
+          subtitle="No MyCode account, no required dashboard, no lock-in. Just your terminal and your chosen provider."
         />
 
         <div className="relative mt-16">
@@ -75,7 +70,7 @@ export default function HowItWorks() {
                     <h3 className="text-xl font-semibold text-white">{s.title}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-slate-400">{s.description}</p>
                     <div className="mt-5 flex-1">
-                      <CodeBlock code={s.code} lang={s.lang} filename={s.lang} />
+                      <CodeBlock code={s.code} lang={s.lang} filename={s.step === "02" ? "Example setup transcript" : s.lang} showCopy={s.step !== "02"} />
                     </div>
                   </div>
                 </Reveal>

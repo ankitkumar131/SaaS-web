@@ -4,18 +4,7 @@ import { Check, Lock, Plug } from "lucide-react";
 import ElectricBorder from "@/components/react-bits/ElectricBorder/ElectricBorder";
 import { SectionHeading, Reveal } from "./primitives";
 
-const PROVIDERS = [
-  { name: "OpenRouter", url: "https://openrouter.ai/api/v1", local: false },
-  { name: "OpenAI", url: "https://api.openai.com/v1", local: false },
-  { name: "NVIDIA NIM", url: "https://integrate.api.nvidia.com/v1", local: false },
-  { name: "Groq", url: "https://api.groq.com/openai/v1", local: false },
-  { name: "Together AI", url: "https://api.together.xyz/v1", local: false },
-  { name: "Fireworks AI", url: "https://api.fireworks.ai/inference/v1", local: false },
-  { name: "Mistral AI", url: "https://api.mistral.ai/v1", local: false },
-  { name: "DeepSeek", url: "https://api.deepseek.com/v1", local: false },
-  { name: "Ollama", url: "http://localhost:11434", local: true },
-  { name: "LM Studio", url: "http://localhost:1234/v1", local: true },
-];
+import { PROVIDERS, PROVIDER_SETUP_LABELS } from "@/lib/mycode";
 
 export default function Providers() {
   return (
@@ -24,8 +13,8 @@ export default function Providers() {
         <SectionHeading
           eyebrow="Providers"
           title="One interface,"
-          highlight="every API"
-          subtitle="If it speaks the OpenAI chat-completions format, MyCode can drive it. Pick a preset or point at your own endpoint."
+          highlight="your choice of AI"
+          subtitle="Use native Anthropic or Ollama, or an OpenAI-compatible endpoint. The wizard fills three URLs; other services use Custom and a pasted URL."
         />
 
         <div className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -38,6 +27,9 @@ export default function Providers() {
                     {p.local && <Lock className="h-3.5 w-3.5 text-teal-400" />}
                   </div>
                   <div className="truncate font-mono text-xs text-teal-300/70">{p.url}</div>
+                  <p className="mt-1 text-xs text-slate-400">
+                    {p.apiProvider} · {PROVIDER_SETUP_LABELS[p.urlSource]}
+                  </p>
                 </div>
                 <span
                   className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
@@ -64,13 +56,13 @@ export default function Providers() {
                   <div>
                     <h3 className="text-base font-semibold text-white">Any OpenAI-compatible API</h3>
                     <p className="mt-1 text-sm text-slate-400">
-                      Azure OpenAI, self-hosted vLLM, LM Studio, or your own gateway — use the{" "}
+                      Self-hosted vLLM, LM Studio, or your own compatible gateway — use the{" "}
                       <span className="font-medium text-teal-300">Custom</span> provider and paste the URL.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-sm font-medium text-teal-300">
-                  <Check className="h-4 w-4" /> Just works
+                  <Check className="h-4 w-4" /> Your endpoint, your key
                 </div>
               </div>
             </ElectricBorder>

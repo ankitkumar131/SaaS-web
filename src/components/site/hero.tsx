@@ -11,19 +11,15 @@ import Magnet from "@/components/react-bits/Magnet/Magnet";
 import { CommandChip, TerminalReplay } from "@/components/ui/code-block";
 import { Eyebrow } from "./primitives";
 
-const REPO = "https://github.com/ankitkumar131/mycode-ai";
+import { APP_REPO, INSTALL_COMMAND, MYCODE_VERSION, SETUP_TRANSCRIPT } from "@/lib/mycode";
 
 const TERMINAL_LINES = [
-  { text: "npm install -g @ankitkumar131/mycode-ai", tone: "cmd" as const },
-  { text: "added 1 package in 3s", tone: "dim" as const },
-  { text: "mycode init", tone: "cmd" as const },
-  { text: "⚡ MyCode Setup Wizard", tone: "out" as const },
-  { text: "? Choose your AI provider: Custom (OpenAI-compatible)", tone: "prompt" as const },
-  { text: "? Model: llama-3.1-70b-versatile   ? Base URL: api.groq.com", tone: "prompt" as const },
-  { text: "✓ Added provider: groq  (priority 1)", tone: "ok" as const },
+  { text: INSTALL_COMMAND, tone: "cmd" as const },
+  ...SETUP_TRANSCRIPT.split("\n").filter(Boolean).map((text) => ({
+    text: text.startsWith("$ ") ? text.slice(2) : text,
+    tone: text.startsWith("$ ") ? "cmd" as const : text.startsWith("Config saved to:") ? "ok" as const : "out" as const,
+  })),
   { text: "mycode chat", tone: "cmd" as const },
-  { text: "You: add a dark mode toggle to the navbar", tone: "out" as const },
-  { text: "MyCode: on it — reading src, planning edits… ✓ done", tone: "ok" as const },
 ];
 
 export default function Hero() {
@@ -50,7 +46,7 @@ export default function Hero() {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <Eyebrow>
-              <Zap className="h-3.5 w-3.5" /> Universal AI coding agent · v1.0
+              <Zap className="h-3.5 w-3.5" /> Universal AI coding agent · v{MYCODE_VERSION}
             </Eyebrow>
           </motion.div>
 
@@ -83,8 +79,8 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.6 }}
             className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-300 sm:text-xl"
           >
-            Like Claude Code, but it works with{" "}
-            <span className="font-semibold text-white">any AI provider</span>. Bring your own API key —
+            One agent for{" "}
+            <span className="font-semibold text-white">OpenAI-compatible APIs, Anthropic, and Ollama</span>. Bring your own keys —
             no lock-in, automatic failover, and autonomous tool use right in your terminal.
           </motion.p>
 
@@ -96,7 +92,7 @@ export default function Hero() {
           >
             <span className="text-slate-500">works with</span>
             <TextType
-              text={["OpenRouter", "Ollama", "Groq", "OpenAI", "NVIDIA NIM", "any OpenAI-compatible API"]}
+              text={["OpenRouter", "Anthropic", "Ollama", "Groq", "OpenAI", "NVIDIA NIM", "any OpenAI-compatible API"]}
               typingSpeed={55}
               deletingSpeed={30}
               pauseDuration={1600}
@@ -113,7 +109,7 @@ export default function Hero() {
             className="mt-9 flex w-full max-w-xl flex-col items-center gap-4"
           >
             <div className="w-full sm:max-w-md">
-              <CommandChip command="npm install -g @ankitkumar131/mycode-ai" />
+              <CommandChip command={INSTALL_COMMAND} />
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Magnet padding={80} magnetStrength={3}>
@@ -140,7 +136,7 @@ export default function Hero() {
                 <BookOpen className="h-4 w-4" /> Read the docs
               </a>
               <a
-                href={REPO}
+                href={APP_REPO}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-2 px-3 py-3 text-sm font-medium text-slate-400 transition hover:text-white"
@@ -157,7 +153,10 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 1.05, ease: [0.22, 1, 0.36, 1] }}
             className="mt-14 w-full max-w-3xl"
           >
-            <TerminalReplay lines={TERMINAL_LINES} />
+            <TerminalReplay lines={TERMINAL_LINES} title="mycode — example setup" />
+            <p className="mt-3 text-xs text-slate-500">
+              Example API-provider setup. Ollama skips the API-key prompt; the saved path depends on your home directory.
+            </p>
           </motion.div>
         </div>
       </div>

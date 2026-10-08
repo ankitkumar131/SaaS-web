@@ -12,6 +12,7 @@ import StarBorder from "@/components/react-bits/StarBorder/StarBorder";
 import { LogoMark } from "@/components/ui/logo";
 import { CommandChip } from "@/components/ui/code-block";
 import { Eyebrow } from "./primitives";
+import { APP_REPO, INSTALL_COMMAND } from "@/lib/mycode";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,8 +74,6 @@ function CtaHeadline() {
   );
 }
 
-const REPO = "https://github.com/ankitkumar131/mycode-ai";
-
 export default function CtaSection() {
   return (
     <section id="get-started" className="relative isolate scroll-mt-24 overflow-hidden py-28 sm:py-36">
@@ -128,7 +127,7 @@ export default function CtaSection() {
           transition={{ duration: 0.7, delay: 0.3 }}
           className="mx-auto mt-9 max-w-md"
         >
-          <CommandChip command="npm install -g @ankitkumar131/mycode-ai" />
+          <CommandChip command={INSTALL_COMMAND} />
         </motion.div>
 
         <motion.div
@@ -156,7 +155,7 @@ export default function CtaSection() {
             </StarBorder>
           </Magnet>
           <a
-            href={REPO}
+            href={APP_REPO}
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10"
@@ -165,7 +164,7 @@ export default function CtaSection() {
           </a>
         </motion.div>
 
-        <p className="mt-6 text-xs text-slate-500">MIT licensed · Requires Node.js 20+ · No account needed</p>
+        <p className="mt-6 text-xs text-slate-500">MIT licensed · Requires Node.js 20+ · No MyCode account needed</p>
       </div>
     </section>
   );

@@ -24,6 +24,8 @@ const COLUMNS = [
       { label: "CLI commands", href: "/docs#commands" },
       { label: "Configuration", href: "/docs#configuration" },
       { label: "Agent tools", href: "/docs#agent" },
+      { label: "Skills & commands", href: "/docs#skills" },
+      { label: "MCP (free)", href: "/docs#mcp" },
     ],
   },
   {
@@ -47,7 +49,7 @@ export default function Footer() {
           <div>
             <Logo />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-400">
-              Your universal AI coding agent in the terminal. One agent, any AI provider, no lock-in — just code.
+              Your AI coding agent in the terminal. OpenAI-compatible APIs, Anthropic, and Ollama — your keys, no lock-in.
             </p>
             <a
               href={REPO}
